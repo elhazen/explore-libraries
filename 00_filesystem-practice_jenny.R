@@ -1,3 +1,8 @@
+#' ---
+#' output: github_document
+#' ---
+
+
 ## First attempt: Just get it to work ----
 
 list.files("~/Desktop/day1_s1_explore-libraries")

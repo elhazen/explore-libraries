@@ -1,7 +1,7 @@
 01\_explore-libraries\_jenny.R
 ================
 elliotthazen
-Wed Jan 31 14:05:24 2018
+Wed Jan 31 14:17:16 2018
 
 ``` r
 ## how jenny might do this in a first exploration
