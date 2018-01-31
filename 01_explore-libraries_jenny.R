@@ -102,3 +102,5 @@ link_graph <- ggraph::ggraph(package_links, layout = "fr") +
   ggtitle("Packages LinkingTo other packages")
 
 link_graph
+
+devtools::session_info()
