@@ -1,7 +1,66 @@
 01\_explore-libraries\_jenny.R
 ================
 elliotthazen
-Wed Jan 31 14:17:16 2018
+Wed Jan 31 14:41:40 2018
+
+``` r
+library(fs)
+library(tidyverse)
+```
+
+    ## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+
+    ## ✔ ggplot2 2.2.1.9000     ✔ purrr   0.2.4     
+    ## ✔ tibble  1.4.2          ✔ dplyr   0.7.4     
+    ## ✔ tidyr   0.7.2          ✔ stringr 1.2.0     
+    ## ✔ readr   1.1.1          ✔ forcats 0.2.0
+
+    ## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+
+``` r
+library(stringr)
+library(igraph)
+```
+
+    ## 
+    ## Attaching package: 'igraph'
+
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     as_data_frame, groups, union
+
+    ## The following objects are masked from 'package:purrr':
+    ## 
+    ##     compose, simplify
+
+    ## The following object is masked from 'package:tidyr':
+    ## 
+    ##     crossing
+
+    ## The following object is masked from 'package:tibble':
+    ## 
+    ##     as_data_frame
+
+    ## The following object is masked from 'package:fs':
+    ## 
+    ##     path
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     decompose, spectrum
+
+    ## The following object is masked from 'package:base':
+    ## 
+    ##     union
+
+``` r
+library(ggraph)
+library(here)
+```
+
+    ## here() starts at /Users/elliotthazen/Documents/R/github/explore-libraries
 
 ``` r
 ## how jenny might do this in a first exploration
@@ -24,28 +83,12 @@ Which libraries does R search for packages?
     ## [1] "/Library/Frameworks/R.framework/Resources/library"
 
 ``` r
-library(fs)
 path_real(.Library)
 ```
 
     ## /Library/Frameworks/R.framework/Versions/3.3/Resources/library
 
 Installed packages
-
-``` r
-library(tidyverse)
-```
-
-    ## ── Attaching packages ──────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
-
-    ## ✔ ggplot2 2.2.1.9000     ✔ purrr   0.2.4     
-    ## ✔ tibble  1.4.2          ✔ dplyr   0.7.4     
-    ## ✔ tidyr   0.7.2          ✔ stringr 1.2.0     
-    ## ✔ readr   1.1.1          ✔ forcats 0.2.0
-
-    ## ── Conflicts ─────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
 
 ``` r
 ipt <- installed.packages() %>%
@@ -55,7 +98,7 @@ ipt <- installed.packages() %>%
 nrow(ipt)
 ```
 
-    ## [1] 268
+    ## [1] 272
 
 Exploring the packages
 
@@ -71,7 +114,7 @@ ipt %>%
     ##   <chr>                                                   <chr>      <int>
     ## 1 /Library/Frameworks/R.framework/Versions/3.3/Resources… base          14
     ## 2 /Library/Frameworks/R.framework/Versions/3.3/Resources… recommend…    15
-    ## 3 /Library/Frameworks/R.framework/Versions/3.3/Resources… <NA>         239
+    ## 3 /Library/Frameworks/R.framework/Versions/3.3/Resources… <NA>         243
 
 ``` r
 ##   * what proportion need compilation?
@@ -83,22 +126,22 @@ ipt %>%
     ## # A tibble: 3 x 3
     ##   NeedsCompilation     n   prop
     ##   <chr>            <int>  <dbl>
-    ## 1 no                 106 0.396 
-    ## 2 yes                138 0.515 
-    ## 3 <NA>                24 0.0896
+    ## 1 no                 106 0.390 
+    ## 2 yes                142 0.522 
+    ## 3 <NA>                24 0.0882
 
 ``` r
 ##   * how break down re: version of R they were built on
 ipt %>%
   count(Built) %>%
-  mutate(prop = n / sum(n))
+  mutate(prop = n / sum(n)) 
 ```
 
     ## # A tibble: 2 x 3
     ##   Built     n  prop
     ##   <chr> <int> <dbl>
-    ## 1 3.3.0    62 0.231
-    ## 2 3.3.2   206 0.769
+    ## 1 3.3.0    63 0.232
+    ## 2 3.3.2   209 0.768
 
 Reflections
 
@@ -142,65 +185,67 @@ setdiff(all_default_pkgs, all_br_pkgs)
     ##  [55] "FNN"               "forcats"           "foreach"          
     ##  [58] "Formula"           "fs"                "gamm4"            
     ##  [61] "gbm"               "gdtools"           "geosphere"        
-    ##  [64] "GGally"            "gganimate"         "ggmap"            
-    ##  [67] "ggplot2"           "ggplot2movies"     "ggsn"             
-    ##  [70] "gh"                "GISTools"          "git2r"            
-    ##  [73] "glue"              "gmt"               "gridBase"         
-    ##  [76] "gridExtra"         "gstat"             "gtable"           
-    ##  [79] "gtools"            "haven"             "here"             
-    ##  [82] "hexbin"            "highr"             "HKprocess"        
-    ##  [85] "Hmisc"             "hms"               "hoardr"           
-    ##  [88] "htmlTable"         "htmltools"         "htmlwidgets"      
-    ##  [91] "httpuv"            "httr"              "igraph"           
-    ##  [94] "ini"               "INLA"              "intervals"        
-    ##  [97] "irlba"             "iterators"         "jpeg"             
-    ## [100] "jsonlite"          "knitr"             "labeling"         
-    ## [103] "latticeExtra"      "lazyeval"          "leaflet"          
-    ## [106] "lme4"              "ltsa"              "lubridate"        
-    ## [109] "lunar"             "magrittr"          "mapdata"          
-    ## [112] "mapproj"           "maps"              "maptools"         
-    ## [115] "markdown"          "MatrixModels"      "mcmc"             
-    ## [118] "MCMCpack"          "memoise"           "mime"             
-    ## [121] "minqa"             "misc3d"            "mixtools"         
-    ## [124] "mnormt"            "modelr"            "multcomp"         
-    ## [127] "munsell"           "mvtnorm"           "ncdf4"            
-    ## [130] "nloptr"            "NMF"               "numDeriv"         
-    ## [133] "openssl"           "orthopolynom"      "PBSmapping"       
-    ## [136] "pillar"            "pixmap"            "pkgconfig"        
-    ## [139] "pkgmaker"          "plogr"             "plot3D"           
-    ## [142] "plotdap"           "plyr"              "png"              
-    ## [145] "polynom"           "praise"            "prettymapr"       
-    ## [148] "prettyunits"       "progress"          "proj4"            
-    ## [151] "proto"             "psych"             "purrr"            
-    ## [154] "quantreg"          "R.methodsS3"       "R.oo"             
-    ## [157] "R.utils"           "R6"                "RandomFields"     
-    ## [160] "RandomFieldsUtils" "RANN"              "rappdirs"         
-    ## [163] "raster"            "rasterVis"         "RColorBrewer"     
-    ## [166] "Rcpp"              "RcppEigen"         "RCurl"            
-    ## [169] "readr"             "readxl"            "registry"         
-    ## [172] "rematch"           "rematch2"          "reprex"           
-    ## [175] "rerddap"           "reshape"           "reshape2"         
-    ## [178] "rex"               "rgdal"             "rgeos"            
-    ## [181] "rgl"               "RgoogleMaps"       "rjson"            
-    ## [184] "rlang"             "rmarkdown"         "rngtools"         
-    ## [187] "rprojroot"         "rstudioapi"        "RUnit"            
-    ## [190] "rvest"             "sandwich"          "scales"           
-    ## [193] "SDMTools"          "segmented"         "selectr"          
-    ## [196] "sf"                "shape"             "shapefiles"       
-    ## [199] "shiny"             "sourcetools"       "sp"               
-    ## [202] "spacetime"         "spam"              "SparseM"          
-    ## [205] "SpatialDeltaGLMM"  "SpatialDFA"        "splancs"          
-    ## [208] "stabledist"        "statmod"           "stringi"          
-    ## [211] "stringr"           "styler"            "svglite"          
-    ## [214] "testthat"          "TH.data"           "ThorsonUtilities" 
-    ## [217] "tibble"            "tidyr"             "tidyselect"       
-    ## [220] "tidyverse"         "tkrplot"           "TMB"              
-    ## [223] "TMBhelper"         "translations"      "tweedie"          
-    ## [226] "udunits2"          "units"             "usethis"          
-    ## [229] "utf8"              "VAST"              "viridis"          
-    ## [232] "viridisLite"       "whisker"           "withr"            
-    ## [235] "XML"               "xml2"              "xtable"           
-    ## [238] "xts"               "yaml"              "zoo"
+    ##  [64] "GGally"            "gganimate"         "ggforce"          
+    ##  [67] "ggmap"             "ggplot2"           "ggplot2movies"    
+    ##  [70] "ggraph"            "ggrepel"           "ggsn"             
+    ##  [73] "gh"                "GISTools"          "git2r"            
+    ##  [76] "glue"              "gmt"               "gridBase"         
+    ##  [79] "gridExtra"         "gstat"             "gtable"           
+    ##  [82] "gtools"            "haven"             "here"             
+    ##  [85] "hexbin"            "highr"             "HKprocess"        
+    ##  [88] "Hmisc"             "hms"               "hoardr"           
+    ##  [91] "htmlTable"         "htmltools"         "htmlwidgets"      
+    ##  [94] "httpuv"            "httr"              "igraph"           
+    ##  [97] "ini"               "INLA"              "intervals"        
+    ## [100] "irlba"             "iterators"         "jpeg"             
+    ## [103] "jsonlite"          "knitr"             "labeling"         
+    ## [106] "latticeExtra"      "lazyeval"          "leaflet"          
+    ## [109] "lme4"              "ltsa"              "lubridate"        
+    ## [112] "lunar"             "magrittr"          "mapdata"          
+    ## [115] "mapproj"           "maps"              "maptools"         
+    ## [118] "markdown"          "MatrixModels"      "mcmc"             
+    ## [121] "MCMCpack"          "memoise"           "mime"             
+    ## [124] "minqa"             "misc3d"            "mixtools"         
+    ## [127] "mnormt"            "modelr"            "multcomp"         
+    ## [130] "munsell"           "mvtnorm"           "ncdf4"            
+    ## [133] "nloptr"            "NMF"               "numDeriv"         
+    ## [136] "openssl"           "orthopolynom"      "PBSmapping"       
+    ## [139] "pillar"            "pixmap"            "pkgconfig"        
+    ## [142] "pkgmaker"          "plogr"             "plot3D"           
+    ## [145] "plotdap"           "plyr"              "png"              
+    ## [148] "polynom"           "praise"            "prettymapr"       
+    ## [151] "prettyunits"       "progress"          "proj4"            
+    ## [154] "proto"             "psych"             "purrr"            
+    ## [157] "quantreg"          "R.methodsS3"       "R.oo"             
+    ## [160] "R.utils"           "R6"                "RandomFields"     
+    ## [163] "RandomFieldsUtils" "RANN"              "rappdirs"         
+    ## [166] "raster"            "rasterVis"         "RColorBrewer"     
+    ## [169] "Rcpp"              "RcppEigen"         "RCurl"            
+    ## [172] "readr"             "readxl"            "registry"         
+    ## [175] "rematch"           "rematch2"          "reprex"           
+    ## [178] "rerddap"           "reshape"           "reshape2"         
+    ## [181] "rex"               "rgdal"             "rgeos"            
+    ## [184] "rgl"               "RgoogleMaps"       "rjson"            
+    ## [187] "rlang"             "rmarkdown"         "rngtools"         
+    ## [190] "rprojroot"         "rstudioapi"        "RUnit"            
+    ## [193] "rvest"             "sandwich"          "scales"           
+    ## [196] "SDMTools"          "segmented"         "selectr"          
+    ## [199] "sf"                "shape"             "shapefiles"       
+    ## [202] "shiny"             "sourcetools"       "sp"               
+    ## [205] "spacetime"         "spam"              "SparseM"          
+    ## [208] "SpatialDeltaGLMM"  "SpatialDFA"        "splancs"          
+    ## [211] "stabledist"        "statmod"           "stringi"          
+    ## [214] "stringr"           "styler"            "svglite"          
+    ## [217] "testthat"          "TH.data"           "ThorsonUtilities" 
+    ## [220] "tibble"            "tidyr"             "tidyselect"       
+    ## [223] "tidyverse"         "tkrplot"           "TMB"              
+    ## [226] "TMBhelper"         "translations"      "tweedie"          
+    ## [229] "tweenr"            "udunits2"          "units"            
+    ## [232] "usethis"           "utf8"              "VAST"             
+    ## [235] "viridis"           "viridisLite"       "whisker"          
+    ## [238] "withr"             "XML"               "xml2"             
+    ## [241] "xtable"            "xts"               "yaml"             
+    ## [244] "zoo"
 
 ``` r
 ## study package naming style (all lower case, contains '.', etc
@@ -217,5 +262,53 @@ ipt2 %>%
     ## # A tibble: 2 x 3
     ##   github     n  prop
     ##   <lgl>  <int> <dbl>
-    ## 1 F        155 0.578
-    ## 2 T        113 0.422
+    ## 1 F        157 0.577
+    ## 2 T        115 0.423
+
+Try out some plotting created here: <https://github.com/aedobbyn/what-they-forgot/blob/5aced5a4061848bfb58ece7e3d8a742550145ab3/day1_s1_explore-libraries/package_links.R>
+
+``` r
+# Tibble of installed packages
+inst_packages <- installed.packages() %>% as_tibble()
+
+# Take a look at what we've got in LinkingTo; seems like a comma separated string
+inst_packages$LinkingTo[1:50]
+```
+
+    ##  [1] NA            NA            NA            NA            NA           
+    ##  [6] NA            NA            NA            NA            NA           
+    ## [11] NA            NA            NA            NA            NA           
+    ## [16] "Rcpp, plogr" NA            NA            NA            NA           
+    ## [21] NA            NA            NA            NA            NA           
+    ## [26] NA            NA            NA            NA            NA           
+    ## [31] NA            NA            NA            NA            NA           
+    ## [36] NA            NA            NA            NA            NA           
+    ## [41] NA            NA            NA            NA            NA           
+    ## [46] NA            NA            NA            NA            NA
+
+``` r
+# For now, take just the first link and remove trailing commas
+inst_packages <- inst_packages %>%
+  mutate(
+    linking_to = str_split(LinkingTo, " ") %>% map_chr(first) %>% gsub(",", "", .)
+  )
+
+# Create the links between packages and their first LinkingTo package
+package_links <- inst_packages %>%
+  drop_na(linking_to) %>%
+  select(Package, linking_to) %>%
+  as_tibble() %>%
+  igraph::graph_from_data_frame()
+
+# Make the graph!
+link_graph <- ggraph::ggraph(package_links, layout = "fr") +
+  geom_edge_link(alpha = 0.5) +
+  geom_node_point(color = "blue", size = 5, alpha = 0.5) +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  theme_void() +
+  ggtitle("Packages LinkingTo other packages")
+
+link_graph
+```
+
+![](01_explore-libraries_jenny_files/figure-markdown_github/unnamed-chunk-7-1.png)
