@@ -417,3 +417,4 @@ devtools::session_info()
     ##  withr         2.1.1      2017-12-19 CRAN (R 3.3.2)                 
     ##  xml2          1.1.1      2017-01-24 CRAN (R 3.3.2)                 
     ##  yaml          2.1.16     2017-12-12 CRAN (R 3.3.2)
+>>>>>>> d1ab9f0e3877f93bc3b63c27eb2e1be965d000a7

@@ -1,0 +1,108 @@
+---
+output: github_document
+---
+
+```{r}
+library(fs)
+library(tidyverse)
+library(stringr)
+library(igraph)
+library(ggraph)
+library(here)
+```
+
+how jenny might do this in a first exploration
+purposely leaving a few things to change later!
+
+#' Which libraries does R search for packages?
+.libPaths()
+
+## let's confirm the second element is, in fact, the default library
+.Library
+
+path_real(.Library)
+
+#' Installed packages
+
+ipt <- installed.packages() %>%
+  as_tibble()
+
+## how many packages?
+nrow(ipt)
+
+#' Exploring the packages
+
+## count some things! inspiration
+##   * tabulate by LibPath, Priority, or both
+ipt %>%
+  count(LibPath, Priority)
+
+##   * what proportion need compilation?
+ipt %>%
+  count(NeedsCompilation) %>%
+  mutate(prop = n / sum(n))
+
+##   * how break down re: version of R they were built on
+ipt %>%
+  count(Built) %>%
+  mutate(prop = n / sum(n)) 
+
+#' Reflections
+
+## reflect on ^^ and make a few notes to yourself; inspiration
+##   * does the number of base + recommended packages make sense to you?
+##   * how does the result of .libPaths() relate to the result of .Library?
+
+
+#' Going further
+
+## if you have time to do more ...
+
+## is every package in .Library either base or recommended?
+all_default_pkgs <- list.files(.Library)
+all_br_pkgs <- ipt %>%
+  filter(Priority %in% c("base", "recommended")) %>%
+  pull(Package)
+setdiff(all_default_pkgs, all_br_pkgs)
+
+## study package naming style (all lower case, contains '.', etc
+
+## use `fields` argument to installed.packages() to get more info and use it!
+ipt2 <- installed.packages(fields = "URL") %>%
+  as_tibble()
+ipt2 %>%
+  mutate(github = grepl("github", URL)) %>%
+  count(github) %>%
+  mutate(prop = n / sum(n))
+
+#' Try out some plotting created here: https://github.com/aedobbyn/what-they-forgot/blob/5aced5a4061848bfb58ece7e3d8a742550145ab3/day1_s1_explore-libraries/package_links.R
+# Tibble of installed packages
+inst_packages <- installed.packages() %>% as_tibble()
+
+# Take a look at what we've got in LinkingTo; seems like a comma separated string
+inst_packages$LinkingTo[1:50]
+
+# For now, take just the first link and remove trailing commas
+inst_packages <- inst_packages %>%
+  mutate(
+    linking_to = str_split(LinkingTo, " ") %>% map_chr(first) %>% gsub(",", "", .)
+  )
+
+# Create the links between packages and their first LinkingTo package
+package_links <- inst_packages %>%
+  drop_na(linking_to) %>%
+  select(Package, linking_to) %>%
+  as_tibble() %>%
+  igraph::graph_from_data_frame()
+
+# Make the graph!
+link_graph <- ggraph::ggraph(package_links, layout = "fr") +
+  geom_edge_link(alpha = 0.5) +
+  geom_node_point(color = "blue", size = 5, alpha = 0.5) +
+  geom_node_text(aes(label = name), repel = TRUE) +
+  theme_void() +
+  ggtitle("Packages LinkingTo other packages")
+
+link_graph
+
+devtools::session_info()
